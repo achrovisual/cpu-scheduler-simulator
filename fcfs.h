@@ -29,7 +29,7 @@ void fcfs(int process[][6], int n) {
 
   for (int  i = 0; i < n; i++) {
     total_waiting_time = total_waiting_time + process[i][5];
-    printf("P[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+    printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
   }
 
   printf("Average waiting time: %.1f", (float)total_waiting_time / (float)n);
