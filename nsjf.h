@@ -32,7 +32,7 @@ void nsjf_sort_process(int process[][6], int n) {
 }
 
 void nsjf_calculate_start_time(int process[][6], int n) {
-  for (int  i = 0; i < n; i++) {
+  for(int  i = 0; i < n; i++) {
     if(i > 0)
     process[i][3] = process[i - 1][4];
     else
@@ -41,7 +41,7 @@ void nsjf_calculate_start_time(int process[][6], int n) {
 }
 
 void nsjf_calculate_end_time(int process[][6], int n) {
-  for (int  i = 0; i < n ; i++) {
+  for(int  i = 0; i < n ; i++) {
     if(i > 0)
     process[i][4] = process[i - 1][4] + process[i][2];
     else
@@ -66,9 +66,10 @@ void nsjf(int process[][6], int n) {
   nsjf_calculate_end_time(process, n);
   nsjf_calculate_start_time(process, n);
 
-  for (int  i = 0; i < n; i++) {
+  printf("Non-Preemptive Shortest Job First\n");
+  for(int  i = 0; i < n; i++) {
     total_waiting_time = total_waiting_time + process[i][5];
-    printf("P[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+    printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
   }
 
   printf("Average waiting time: %.1f", (float)total_waiting_time / (float)n);
