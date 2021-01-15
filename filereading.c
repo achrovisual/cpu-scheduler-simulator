@@ -82,7 +82,19 @@ int main(){
         printf("A process time's parameter cannot have a negative value.\n");
         return 0;
     }
-    
+    //check if process id is unique
+    for(i = 0; i < rowSize-1; i++){
+        for(j = 0; j < rowSize - 1; j++){
+            if(processValues[i][0] == processValues[j][0]){
+                errVal = 1;
+            }
+        }
+    }
+    if(errVal == 1){
+        printf("Process IDs cannot have the same value.\n");
+        return 0;
+    }
+
     printf("\n");
     return 0;
 }
