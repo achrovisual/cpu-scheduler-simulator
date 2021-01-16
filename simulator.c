@@ -4,9 +4,10 @@
 #include <ctype.h>
 #include "fcfs.h"
 #include "nsjf.h"
+#include "psjf.h"
 #include "file_reading.h"
 
-#define MAX 100
+#define MAX 101
 
 int main()
 {
@@ -19,8 +20,8 @@ int main()
   fcfs(process_values, parameters[1]);
   else if(parameters[0] == 1)
   nsjf(process_values, parameters[1]);
-  // else if(parameters[0] == 2)
-  // psjf(process_values, parameters[1]);
+  else if(parameters[0] == 2)
+  psjf(process_values, parameters[1]);
   // else if(parameters[0] == 3)
   // rr(process_values, parameters[1]);
   return 0;

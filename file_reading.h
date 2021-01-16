@@ -5,7 +5,7 @@ void read_file(int parameters[], int process_values[][6]) {
   char string[MAX_STRING][MAX_STRING];
   int i = 0, j = 0, n = 0, error_code = 0, process_count = 0;
   int row_size = 0;
-  char* filename = "./tests/nsjf.txt";
+  char* filename = "./tests/psjf.txt";
 
   fp = fopen(filename, "r");
   //open file
