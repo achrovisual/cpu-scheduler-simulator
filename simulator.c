@@ -13,7 +13,12 @@ int main()
   int process_values[MAX][6];
   int parameters[3];
 
-  read_file(parameters, process_values);
+  char filename[256];
+
+  printf("Enter the filename of the test case: ");
+  scanf("%s", filename);
+
+  read_file(parameters, process_values, filename);
 
   if(parameters[0] == 0)
   fcfs(process_values, parameters[1]);

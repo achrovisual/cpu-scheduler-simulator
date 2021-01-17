@@ -1,11 +1,12 @@
 #define MAX_STRING 900
 
-void read_file(int parameters[], int process_values[][6]) {
+void read_file(int parameters[], int process_values[][6], char fn[]) {
   FILE *fp;
   char string[MAX_STRING][MAX_STRING];
   int i = 0, j = 0, n = 0, error_code = 0, process_count = 0;
   int row_size = 0;
-  char* filename = "./tests/nsjf.txt";
+  char filename[MAX_STRING] = "./";
+  strcat(filename, fn);
 
   fp = fopen(filename, "r");
   //open file
