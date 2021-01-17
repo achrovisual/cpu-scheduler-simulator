@@ -1,8 +1,13 @@
 #include <stdio.h>
 
-void nsjf_sort_process(int process[][6], int n) {
-  int btime = 0, min, z = 1;
+#define MAX 100
 
+void nsjf_initialize_array(int arr[], int size) {
+  for(int i = 0; i < size; i ++)
+  arr[i] = 32767;
+}
+
+void nsjf_sort_process(int process[][6], int n) {
   for(int i = 0; i < n; i++)
   for(int j = 0; j < n - i - 1; j++)
   if(process[j][1] > process[j + 1][1]) {
@@ -12,22 +17,34 @@ void nsjf_sort_process(int process[][6], int n) {
       process[j + 1][k] = temp;
     }
   }
+}
 
-  for(int j=0;j<5;j++)
+void nsjf_maintain_minimum(int process[][6], int n) {
+  int temp, val;
+  int completion_time[n];
+
+  nsjf_initialize_array(completion_time, n);
+
+  completion_time[0] = process[0][1] + process[0][2];
+
+  for(int i = 1; i < n; i++)
   {
-    btime=btime+process[j][2];
-    min=process[z][2];
+    temp = completion_time[i - 1];
+    int min = process[i][2];
 
-    for(int i = z; i < n; i++) {
-      if (btime >= process[i][1] && process[i][2] < min) {
-        for(int k = 0; k < 6; k++) {
-          int temp = process[z][k];
-          process[z][k] = process[i][k];
-          process[i][k] = temp;
-        }
-      }
+    for(int j = i; j < n; j++)
+    if(temp >= process[j][1] && min >= process[j][2]) {
+      min = process[j][2];
+      val = j;
     }
-    z++;
+
+    completion_time[val] = temp + process[val][2];
+
+    for(int k = 0; k < 6; k++) {
+      int tempo = process[val][k];
+      process[val][k] = process[i][k];
+      process[i][k] = tempo;
+    }
   }
 }
 
@@ -62,6 +79,7 @@ void nsjf(int process[][6], int n) {
   int total_waiting_time = 0;
 
   nsjf_sort_process(process, n);
+  nsjf_maintain_minimum(process, n);
   nsjf_calculate_waiting_time(process, n);
   nsjf_calculate_end_time(process, n);
   nsjf_calculate_start_time(process, n);

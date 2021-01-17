@@ -1,11 +1,12 @@
 #include <stdio.h>
 #define MAX_VAL 999
-void psjfWaitTime(int process[][6], int n) 
+void psjfWaitTime(int process[][6], int n, int pausedStates[][6]) 
 { 
     int numProcesses = n;
 
     int remainingTime[101];
 
+    int pausedStateIterator = 0;
     for(int i = 0; i < n; i++){
         remainingTime[i] = process[i][2];
 
@@ -21,6 +22,7 @@ void psjfWaitTime(int process[][6], int n)
                 smallestBurstIndex = j;
                 minVal = remainingTime[j];
                 bCheck = 1;
+                process[j][3] = time;
             }
         }
 
@@ -60,16 +62,17 @@ void psjf(int process[][6], int n){
     int totWaiting = 0;
     float aveWaiting = 0;
     int smallestBurstIndex = 101;
+    int pausedStates[101][6];
     process[100][2] = MAX_VAL;
     printf("%d\n\n\n", numProcesses);
-    psjfWaitTime(process, n);
+
+    psjfWaitTime(process, n, pausedStates);
     //index 0 = PID; index 1 = arrival; index 2 = burst; index 3 = start; index 4 = end; index 5 = wait
     for(time = 0; completedProcess != numProcesses; time++){
         smallestBurstIndex = 100;
         for(int i = 0; i < numProcesses; i++){
             if(process[i][1] <= time && process[i][2] < process[smallestBurstIndex][2] && process[i][2] > 0){
                 smallestBurstIndex = i;
-                process[smallestBurstIndex][3] = time;
             }
         }
 
