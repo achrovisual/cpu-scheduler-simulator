@@ -11,7 +11,6 @@ void psjfWaitTime(int process[][6], int n, int pausedStates[][6], int *psIter)
 
     for(int i = 0; i < n; i++){
         remainingTime[i] = process[i][2];
-
     }
 
     int completedProcess = 0, time = 0, smallestBurstIndex = 101, minVal = MAX_VAL;
@@ -21,9 +20,7 @@ void psjfWaitTime(int process[][6], int n, int pausedStates[][6], int *psIter)
 
         for(int j = 0; j < numProcesses; j++){
             if((process[j][1] <= time) && (remainingTime[j]  < minVal) && remainingTime[j] > 0){
-                
                 if(firstPass[j] == 1){
-                    printf("[%d] Start time: %d End time: %d | Wait: %d\n", process[smallestBurstIndex][0], process[smallestBurstIndex][3], time, process[smallestBurstIndex][5]);
                    pausedStates[(*psIter)][0] =  process[smallestBurstIndex][0];
                    pausedStates[(*psIter)][3] =  process[smallestBurstIndex][3];
                    pausedStates[(*psIter)][4] =  time;
@@ -77,7 +74,6 @@ void psjf(int process[][6], int n){
     int smallestBurstIndex = 101;
     int pausedStates[100][6];
     process[100][2] = MAX_VAL;
-    printf("%d\n\n\n", numProcesses);
     int psIter = 0;
     psjfWaitTime(process, n, pausedStates, &psIter);
     //index 0 = PID; index 1 = arrival; index 2 = burst; index 3 = start; index 4 = end; index 5 = wait
@@ -91,16 +87,12 @@ void psjf(int process[][6], int n){
 
         process[smallestBurstIndex][2]--;
 
-        printf("%d\n", smallestBurstIndex);
-        printf("%d\n", completedProcess);
         if(process[smallestBurstIndex][2] == 0){
             completedProcess++;
-            printf("%d\n", time);
         }
     }
  
     printf("Preemptive Shortest Job First\n");
-    printf("Stored Paused States: %d\n", psIter);
     //remove non-unique paused start time
     for(int i = 0; i < psIter; i++){
         for(int j = 0; j < n; j++){
@@ -124,10 +116,21 @@ void psjf(int process[][6], int n){
         int bValid = 1;
         for(int j = 0; j < psIter; j++){
             if(process[i][0] == pausedStates[j][0] && process[i][3] != pausedStates[j][3]){
-                printf("[%d] Start time: %d End time: %d | ", pausedStates[i][0], pausedStates[i][3], pausedStates[i][4]);
+                if(bValid == 1){
+                    printf("[%d] Start time: %d End time: %d | ", pausedStates[i][0], pausedStates[i][3], pausedStates[i][4]);
+                } else {
+                    printf("Start time: %d End time: %d | ",  pausedStates[i][3], pausedStates[i][4]);
+                }
+                
+                bValid = 0;
             }
         }
-        printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+        if(bValid == 1){
+            printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+        } else {
+            printf("Start time: %d End time: %d | Waiting time: %d\n",  process[i][3], process[i][4], process[i][5]);
+        }
+        
     }
 
     printf("Average waiting time: %.1f", (float)totWaiting / (float)n);
