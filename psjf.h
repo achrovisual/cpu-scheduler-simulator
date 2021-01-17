@@ -1,12 +1,14 @@
 #include <stdio.h>
 #define MAX_VAL 999
-void psjfWaitTime(int process[][6], int n, int pausedStates[][6]) 
+void psjfWaitTime(int process[][6], int n, int pausedStates[][6], int *psIter) 
 { 
     int numProcesses = n;
 
-    int remainingTime[101];
+    int remainingTime[101], firstPass[101];
+    for(int i = 0; i < n; i++){
+        firstPass[i] = 1;
+    }
 
-    int pausedStateIterator = 0;
     for(int i = 0; i < n; i++){
         remainingTime[i] = process[i][2];
 
@@ -14,15 +16,26 @@ void psjfWaitTime(int process[][6], int n, int pausedStates[][6])
 
     int completedProcess = 0, time = 0, smallestBurstIndex = 101, minVal = MAX_VAL;
     int bCheck = 0;
-
+     *psIter = 0;
     while(completedProcess != numProcesses){
 
         for(int j = 0; j < numProcesses; j++){
             if((process[j][1] <= time) && (remainingTime[j]  < minVal) && remainingTime[j] > 0){
-                smallestBurstIndex = j;
+                
+                if(firstPass[j] == 1){
+                    printf("[%d] Start time: %d End time: %d | Wait: %d\n", process[smallestBurstIndex][0], process[smallestBurstIndex][3], time, process[smallestBurstIndex][5]);
+                   pausedStates[(*psIter)][0] =  process[smallestBurstIndex][0];
+                   pausedStates[(*psIter)][3] =  process[smallestBurstIndex][3];
+                   pausedStates[(*psIter)][4] =  time;
+                   pausedStates[(*psIter)][5] = minVal;
+                   (*psIter)++;
+                }
+                
                 minVal = remainingTime[j];
                 bCheck = 1;
                 process[j][3] = time;
+                firstPass[j] = 0;
+                smallestBurstIndex = j;
             }
         }
 
@@ -62,11 +75,11 @@ void psjf(int process[][6], int n){
     int totWaiting = 0;
     float aveWaiting = 0;
     int smallestBurstIndex = 101;
-    int pausedStates[101][6];
+    int pausedStates[100][6];
     process[100][2] = MAX_VAL;
     printf("%d\n\n\n", numProcesses);
-
-    psjfWaitTime(process, n, pausedStates);
+    int psIter = 0;
+    psjfWaitTime(process, n, pausedStates, &psIter);
     //index 0 = PID; index 1 = arrival; index 2 = burst; index 3 = start; index 4 = end; index 5 = wait
     for(time = 0; completedProcess != numProcesses; time++){
         smallestBurstIndex = 100;
@@ -87,8 +100,33 @@ void psjf(int process[][6], int n){
     }
  
     printf("Preemptive Shortest Job First\n");
+    printf("Stored Paused States: %d\n", psIter);
+    //remove non-unique paused start time
+    for(int i = 0; i < psIter; i++){
+        for(int j = 0; j < n; j++){
+            if(pausedStates[i][3] == process[j][3]){
+                //shift
+                for(int k = j; k < psIter; k++){
+                    pausedStates[k][0] = pausedStates[k+1][0]; 
+                    pausedStates[k][1] = pausedStates[k+1][1]; 
+                    pausedStates[k][2] = pausedStates[k+1][2]; 
+                    pausedStates[k][3] = pausedStates[k+1][3]; 
+                    pausedStates[k][4] = pausedStates[k+1][4]; 
+                    pausedStates[k][5] = pausedStates[k+1][5]; 
+                }
+                psIter--;
+            }
+        }
+    }
+
     for(int  i = 0; i < n; i++) {
         totWaiting = totWaiting + process[i][5];
+        int bValid = 1;
+        for(int j = 0; j < psIter; j++){
+            if(process[i][0] == pausedStates[j][0] && process[i][3] != pausedStates[j][3]){
+                printf("[%d] Start time: %d End time: %d | ", pausedStates[i][0], pausedStates[i][3], pausedStates[i][4]);
+            }
+        }
         printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
     }
 
