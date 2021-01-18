@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #define MAX_STRING 900
 
 void read_file(int parameters[], int process_values[][6], char fn[]) {

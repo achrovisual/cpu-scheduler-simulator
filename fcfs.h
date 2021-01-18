@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 void fcfs_calculate_start_time(int process[][6], int n) {
   for(int  i = 0; i < n ; i++)

@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+
 #define MAX_VAL 999
 
 void psjf_initialize_array(int arr[][4], int size) {

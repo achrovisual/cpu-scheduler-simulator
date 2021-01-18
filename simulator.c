@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include "fcfs.h"
 #include "nsjf.h"
 #include "psjf.h"
