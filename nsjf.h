@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #define MAX 101
 
 void nsjf_initialize_array(int arr[], int size) {
