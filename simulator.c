@@ -2,6 +2,8 @@
 #include "nsjf.h"
 #include "psjf.h"
 #include "file_reading.h"
+#include "core.h"
+#include "cpu_scheduling_core.h"
 
 #define MAX 101
 

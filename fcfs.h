@@ -1,41 +1,27 @@
 #include <stdio.h>
 #include <string.h>
+#include "core.h"
+#include "cpu_scheduling_core.h"
 
-void fcfs_calculate_start_time(int process[][6], int n) {
-  for(int  i = 0; i < n ; i++)
-  process[i][3] = process[i][5];
-}
-
-void fcfs_calculate_end_time(int process[][6], int n) {
-  for(int  i = 0; i < n ; i++) {
-    if(i > 0)
-    process[i][4] = process[i][5] + process[i][2];
-    else
-    process[i][4] = process[i][2];
+void fcfs_calculate_values(int process[][6], int turn_around_time[] , int *total_waiting_time, int n) {
+  for(int i = 0; i < n; i++) {
+    process[i][3] = (i == 0) ? process[i][1] : process[i - 1][4] > process[i][1] ? process[i - 1][4] : process[i][1];
+    process[i][4] = process[i][3] + process[i][2];
+    turn_around_time[i] = process[i][4] - process[i][1];
+    process[i][5] = turn_around_time[i] - process[i][2];
+    *total_waiting_time += process[i][5];
   }
-
-}
-
-void fcfs_calculate_waiting_time(int process[][6], int n) {
-  process[0][5] = 0;
-
-  for(int  i = 1; i < n ; i++)
-  process[i][5] =  process[i - 1][2] + process[i - 1][5] ;
 }
 
 void fcfs(int process[][6], int n) {
   int total_waiting_time = 0;
+  int turn_around_time[n];
 
-  fcfs_calculate_waiting_time(process, n);
-  fcfs_calculate_start_time(process, n);
-  fcfs_calculate_end_time(process, n);
+  initialize_array(turn_around_time, n, 0);
 
-  printf("First Come, First Served\n");
-  for(int  i = 0; i < n; i++) {
-    total_waiting_time = total_waiting_time + process[i][5];
-    printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
-  }
+  sort_array_by_index(n, 6, process, 1);
 
-  printf("Average waiting time: %.1f", (float)total_waiting_time / (float)n);
-  printf("\n");
+  fcfs_calculate_values(process, turn_around_time, &total_waiting_time, n);
+
+  print_result("First Come, First Served", process, n, total_waiting_time);
 }

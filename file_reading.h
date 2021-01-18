@@ -72,7 +72,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
   }
 
   //validate process values
-  for(i = 0; i < row_size-1; i++) {
+  for(i = 0; i < row_size - 1; i++) {
     for(j = 0; j < 3; j++) {
       if(process_values[i][j] < 0) {
         error_code = 1;
@@ -84,7 +84,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
   }
 
   //check if process id is unique
-  for(i = 0; i < row_size-1; i++) {
+  for(i = 0; i < row_size - 1; i++) {
     for(j = i + 1; j < row_size - 1; j++) {
       if(process_values[i][0] == process_values[j][0]) {
         error_code = 1;
@@ -96,7 +96,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
     printf("Process IDs cannot have the same value.\n");
   }
 
-  // for (int  i = 0; i < 3; i++) {
+  // for (int  i = 0; i < 5; i++) {
   //   printf("%d %d %d %d %d %d\n", process_values[i][0], process_values[i][1], process_values[i][2], process_values[i][3], process_values[i][4], process_values[i][5]);
   // }
 }

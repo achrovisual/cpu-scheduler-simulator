@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include "core.h"
+#include "cpu_scheduling_core.h"
 
 #define MAX_VAL 999
 
@@ -52,7 +54,6 @@ void psjf_calculate_waiting_time(int process[][6], int paused_states[][4], int *
   int check = 0;
   *iterator = 0;
   while(completed_process != n){
-
     for(int j = 0; j < n; j++){
       if((process[j][1] <= time) && (remaining_time[j]  < min) && remaining_time[j] > 0){
         if(first_pass[j] == 1){
@@ -98,7 +99,6 @@ void psjf_calculate_waiting_time(int process[][6], int paused_states[][4], int *
     }
 
     time++;
-
   }
 }
 
@@ -111,26 +111,8 @@ void psjf(int process[][6], int n){
   psjf_clean_paused_states(process, paused_states, &iterator, n);
   psjf_sort_process(process, paused_states, n);
 
-  printf("Preemptive Shortest Job First\n");
-  for(int  i = 0; i < n; i++) {
-    total_waiting_time = total_waiting_time + process[i][5];
-    int is_valid = 1;
-    for(int j = 0; j < iterator; j++){
-      if(process[i][0] == paused_states[j][0] && process[i][3] != paused_states[j][1]){
-        if(is_valid == 1)
-        printf("[%d] Start time: %d End time: %d | ", paused_states[j][0], paused_states[j][1], paused_states[j][2]);
-        else
-        printf("Start time: %d End time: %d | ",  paused_states[j][1], paused_states[j][2]);
+  calculate_total_waiting_time(process, n, &total_waiting_time);
 
-        is_valid = 0;
-      }
-    }
-    if(is_valid == 1)
-    printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
-    else
-    printf("Start time: %d End time: %d | Waiting time: %d\n",  process[i][3], process[i][4], process[i][5]);
-  }
+  print_result_with_paused_states("Preemptive Shortest Job First", process, paused_states, n, iterator, total_waiting_time);
 
-  printf("Average waiting time: %.1f", (float)total_waiting_time / (float)n);
-  printf("\n");
 }

@@ -1,96 +1,59 @@
 #include <stdio.h>
 #include <string.h>
+#include "core.h"
+#include "cpu_scheduling_core.h"
 
 #define MAX 101
 
-void nsjf_initialize_array(int arr[], int size) {
-  for(int i = 0; i < size; i ++)
-  arr[i] = 32767;
+void nsjf_calculate_values(int process[][6], int running_time, int turn_around_time[] , int *total_waiting_time, int status[], int value) {
+  process[value][3] = running_time;
+  process[value][4] = process[value][3] + process[value][2];
+  turn_around_time[value] = process[value][4] - process[value][1];
+  process[value][5] = turn_around_time[value] - process[value][2];
+  *total_waiting_time += process[value][5];
+  status[value] = 1;
 }
 
-void nsjf_sort_process(int process[][6], int n) {
-  for(int i = 0; i < n; i++)
-  for(int j = 0; j < n - i - 1; j++)
-  if(process[j][1] > process[j + 1][1]) {
-    for(int k = 0; k < 6; k++) {
-      int temp = process[j][k];
-      process[j][k] = process[j + 1][k];
-      process[j + 1][k] = temp;
+void nsjf_find_minimum(int process[][6], int status[], int n, int running_time, int *value, int *minimum) {
+  for(int i = 0; i < n; i++) {
+    if(process[i][1] <= running_time && status[i] == 0) {
+      if(process[i][2] < *minimum) {
+        *minimum = process[i][2];
+        *value = i;
+      }
+      if(process[i][2] == *minimum)
+      if(process[i][1] < process[*value][1]) {
+        *minimum = process[i][2];
+        *value = i;
+      }
     }
-  }
-}
-
-void nsjf_maintain_minimum(int process[][6], int n) {
-  int temp, val;
-  int completion_time[n];
-
-  nsjf_initialize_array(completion_time, n);
-
-  completion_time[0] = process[0][1] + process[0][2];
-
-  for(int i = 1; i < n; i++)
-  {
-    temp = completion_time[i - 1];
-    int min = process[i][2];
-
-    for(int j = i; j < n; j++)
-    if(temp >= process[j][1] && min >= process[j][2]) {
-      min = process[j][2];
-      val = j;
-    }
-
-    completion_time[val] = temp + process[val][2];
-
-    for(int k = 0; k < 6; k++) {
-      int tempo = process[val][k];
-      process[val][k] = process[i][k];
-      process[i][k] = tempo;
-    }
-  }
-}
-
-void nsjf_calculate_start_time(int process[][6], int n) {
-  for(int  i = 0; i < n; i++) {
-    if(i > 0)
-    process[i][3] = process[i - 1][4];
-    else
-    process[i][3] = 0;
-  }
-}
-
-void nsjf_calculate_end_time(int process[][6], int n) {
-  for(int  i = 0; i < n ; i++) {
-    if(i > 0)
-    process[i][4] = process[i - 1][4] + process[i][2];
-    else
-    process[i][4] = process[i][2];
-  }
-}
-
-void nsjf_calculate_waiting_time(int process[][6], int n) {
-  int sum = 0;
-  process[0][5] = 0;
-  for(int i = 1; i < n; i++) {
-    sum += process[i - 1][2];
-    process[i][5] = sum - process[i][1];
   }
 }
 
 void nsjf(int process[][6], int n) {
-  int total_waiting_time = 0;
+  int total_waiting_time = 0, running_time = 0, completed = 0;
+  int turn_around_time[n], status[n];
 
-  nsjf_sort_process(process, n);
-  nsjf_maintain_minimum(process, n);
-  nsjf_calculate_waiting_time(process, n);
-  nsjf_calculate_end_time(process, n);
-  nsjf_calculate_start_time(process, n);
+  initialize_array(status, n, 0);
+  initialize_array(turn_around_time, n, 0);
 
-  printf("Non-Preemptive Shortest Job First\n");
-  for(int  i = 0; i < n; i++) {
-    total_waiting_time = total_waiting_time + process[i][5];
-    printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+  while(completed != n) {
+    int value = -1;
+    int minimum = 10000000;
+
+    nsjf_find_minimum(process, status, n, running_time, &value, &minimum);
+
+    if(value != -1) {
+      nsjf_calculate_values(process, running_time, turn_around_time, &total_waiting_time, status, value);
+
+      completed++;
+      running_time = process[value][4];
+    }
+    else
+    running_time++;
   }
 
-  printf("Average waiting time: %.1f", (float)total_waiting_time / (float)n);
-  printf("\n");
+  sort_array_by_index(n, 6, process, 3);
+
+  print_result("Non-Preemptive Shortest Job First", process, n, total_waiting_time);
 }
