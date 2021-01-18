@@ -1,5 +1,17 @@
 #define MAX_VAL 999
 
+void psjf_sort_process(int process[][6], int paused_states[][6], int n) {
+  for(int i = 0; i < n; i++)
+  for(int j = 0; j < n - i - 1; j++)
+  if(process[j][5] > process[j + 1][5]) {
+    for(int k = 0; k < 6; k++) {
+      int temp = process[j][k];
+      process[j][k] = process[j + 1][k];
+      process[j + 1][k] = temp;
+    }
+  }
+}
+
 void psjf_calculate_waiting_time(int process[][6], int n, int paused_states[][6], int *iterator)
 {
   int n_process = n;
@@ -21,9 +33,9 @@ void psjf_calculate_waiting_time(int process[][6], int n, int paused_states[][6]
     for(int j = 0; j < n_process; j++){
       if((process[j][1] <= time) && (remaining_time[j]  < min) && remaining_time[j] > 0){
         if(first_pass[j] == 1){
-          paused_states[(*iterator)][0] =  process[smallest_burst_index][0];
-          paused_states[(*iterator)][3] =  process[smallest_burst_index][3];
-          paused_states[(*iterator)][4] =  time;
+          paused_states[(*iterator)][0] = process[smallest_burst_index][0];
+          paused_states[(*iterator)][3] = process[smallest_burst_index][3];
+          paused_states[(*iterator)][4] = time;
           paused_states[(*iterator)][5] = min;
           (*iterator)++;
         }
@@ -112,17 +124,23 @@ void psjf(int process[][6], int n){
     }
   }
 
+  psjf_sort_process(process, paused_states, n);
+
+  // for(int  i = 0; i < n; i++) {
+  //   // total_waiting_time = total_waiting_time + process[i][5];
+  //   printf("[%d] Start time: %d End time: %d | Waiting time: %d\n", process[i][0], process[i][3], process[i][4], process[i][5]);
+  // }
+
   for(int  i = 0; i < n; i++) {
     total_waiting_time = total_waiting_time + process[i][5];
     int is_valid = 1;
     for(int j = 0; j < iterator; j++){
       if(process[i][0] == paused_states[j][0] && process[i][3] != paused_states[j][3]){
         if(is_valid == 1){
-          printf("[%d] Start time: %d End time: %d | ", paused_states[i][0], paused_states[i][3], paused_states[i][4]);
+          printf("[%d] Start time: %d End time: %d | ", paused_states[j][0], paused_states[j][3], paused_states[j][4]);
         } else {
-          printf("Start time: %d End time: %d | ",  paused_states[i][3], paused_states[i][4]);
+          printf("Start time: %d End time: %d | ",  paused_states[j][3], paused_states[j][4]);
         }
-
         is_valid = 0;
       }
     }
