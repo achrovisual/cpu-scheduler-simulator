@@ -16,14 +16,10 @@ void psjf_clean_paused_states(int process[][6], int paused_states[][4], int *ite
   for(int i = 0; i < *iterator; i++)
   for(int j = 0; j < n; j++)
   if(paused_states[i][1] == process[j][3]){
-    //shift
-    for(int k = j; k < *iterator; k++){
-      paused_states[k][0] = paused_states[k + 1][0];
-      paused_states[k][1] = paused_states[k + 1][1];
-      paused_states[k][2] = paused_states[k + 1][2];
-      paused_states[k][3] = paused_states[k + 1][3];
-    }
-    *iterator = *iterator - 1;
+      paused_states[i][0] = 0;
+      paused_states[i][1] = 0;
+      paused_states[i][2] = 0;
+      paused_states[i][3] = 0;
   }
 }
 
@@ -55,7 +51,7 @@ void psjf_calculate_waiting_time(int process[][6], int paused_states[][4], int *
   *iterator = 0;
   while(completed_process != n){
     for(int j = 0; j < n; j++){
-      if((process[j][1] <= time) && (remaining_time[j]  < min) && remaining_time[j] > 0){
+      if((process[j][1] <= time) && (remaining_time[j] < min) && remaining_time[j] > 0){
         if(first_pass[j] == 1){
           paused_states[(*iterator)][0] = process[smallest_burst_index][0];
           paused_states[(*iterator)][1] = process[smallest_burst_index][3];
@@ -80,7 +76,7 @@ void psjf_calculate_waiting_time(int process[][6], int paused_states[][4], int *
     remaining_time[smallest_burst_index]--;
     min = remaining_time[smallest_burst_index];
 
-    if(min==0){
+    if(min <= 0){
       min = MAX_VAL;
     }
 
@@ -104,7 +100,7 @@ void psjf_calculate_waiting_time(int process[][6], int paused_states[][4], int *
 
 void psjf(int process[][6], int n){
   int total_waiting_time = 0;
-  int paused_states[n][4];
+  int paused_states[MAX_VAL][4];
   int iterator = 0;
 
   psjf_calculate_waiting_time(process, paused_states, &iterator, n);
