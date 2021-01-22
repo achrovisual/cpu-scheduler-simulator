@@ -23,16 +23,29 @@ void roundRobin(int process[][6], int n, int quantum){
     }
 
     for(int time = 0, i = 0, completedProcesses = 0; completedProcesses < n;){
-
+        
         if(process[i][2] <= quantum && process[i][2] > 0){
+            //time-leaping since burst time is <= quantum
             bProcessCompleted = 1;
+            //set start time
+            process[i][3] = time;
+            //set end time 
             process[i][4] = time+=process[i][2];
             process[i][2] = 0;
             
         } else if(process[i][2] > 0){
-            //store paused states here
+            
+            //set start time for current process
+            process[i][3] = time;
+            //remove quantum val from burst
             process[i][2] -= quantum;
             time+=quantum;
+            
+            //store paused states here
+            //pausedStates[pausedStateIterator][0] = process[i][0];
+            //pausedStates[pausedStateIterator][1] = process[i][3];
+            //pausedStates[pausedStateIterator][2] = time;
+            //pausedStateIterator++;
         }
 
         if(bProcessCompleted == 1 && process[i][2] == 0){
@@ -44,14 +57,14 @@ void roundRobin(int process[][6], int n, int quantum){
 
         if(i == n-1){
             i =0;
-        } else if(process[i+1][1] <= time){
+        } else if(process[i+1][1] <= time && i+1 < n){
             i++;
         } else {
             i = 0;
         }
     }
 
-    //printing
+    //printing wala pa paused states tho + ala pa test cases
     for(int  i = 0; i < n; i++) {
         totWaiting = totWaiting + process[i][5];
         int bValid = 1;
