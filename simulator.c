@@ -2,6 +2,7 @@
 #include "nsjf.h"
 #include "psjf.h"
 #include "file_reading.h"
+#include "round-robin.h"
 #include "core.h"
 #include "cpu_scheduling_core.h"
 
