@@ -26,7 +26,7 @@ int main()
   nsjf(process_values, parameters[1]);
   else if(parameters[0] == 2)
   psjf(process_values, parameters[1]);
-  // else if(parameters[0] == 3)
-  // rr(process_values, parameters[1]);
+  else if(parameters[0] == 3)
+  roundRobin(process_values, parameters[1], parameters[2]);
   return 0;
 }
