@@ -9,60 +9,63 @@ void roundRobin(int process[][6], int n, int quantum){
     //init pausedState storage
     int pausedStates[MAX_VAL][6];
     int burstTimes[MAX_VAL];
-    int bProcessCompleted = 0;
+    int bTrack = 0;
     int pausedStateIterator = 0;
     int totWaiting = 0;
+    int arrival = 0;
+    int time = 0;
+    //sort_array_by_index(n, 6, process, 1);
+
     for(int i = 0; i < MAX_VAL; i++){
         for(int j = 0; j < 6; j++){
             pausedStates[i][j] = 0;
         }
     }
-    
     for(int i = 0; i < n; i++){
         burstTimes[i] = process[i][2];
     }
 
-    for(int time = 0, i = 0, completedProcesses = 0; completedProcesses < n;){
+    for(int time = 0, completedProcess = 0, i = 0, quantumTracker = 0; completedProcess < n; time++){
         
-        if(process[i][2] <= quantum && process[i][2] > 0){
-            //time-leaping since burst time is <= quantum
-            bProcessCompleted = 1;
-            //set start time
-            process[i][3] = time;
-            //set end time 
-            process[i][4] = time+=process[i][2];
+        if(process[i][2] > 0 && process[i][1] <= time){
+            process[i][2]--;
+            bTrack = 1;
+            quantumTracker++;
+        } 
+        
+        if(process[i][2] == 0){
+            completedProcess++;
             process[i][2] = 0;
-            
-        } else if(process[i][2] > 0){
-            
-            //set start time for current process
-            process[i][3] = time;
-            //remove quantum val from burst
-            process[i][2] -= quantum;
-            time+=quantum;
-            
-            //store paused states here
-            //pausedStates[pausedStateIterator][0] = process[i][0];
-            //pausedStates[pausedStateIterator][1] = process[i][3];
-            //pausedStates[pausedStateIterator][2] = time;
-            //pausedStateIterator++;
-        }
-
-        if(bProcessCompleted == 1 && process[i][2] == 0){
-            //store wait time
+            process[i][4] = time;
             process[i][5] = time - process[i][1] - burstTimes[i];
-            bProcessCompleted = 0;
-            completedProcesses++;
+            quantumTracker = 0;
+            bTrack = 1;
         }
 
-        if(i == n-1){
-            i =0;
-        } else if(process[i+1][1] <= time && i+1 < n){
-            i++;
+        if(quantumTracker == quantum - 1){
+            quantumTracker = 0;
+        }
+
+        if(bTrack == 1){
+            bTrack = 0;
         } else {
+            quantumTracker++;
+        }
+
+        if(i == n-1 && quantumTracker == 0){
+            i = 0;
+        } else if(i < n && quantumTracker == quantum - 1){
+            i++;
+        } else if(i < n && quantumTracker == 0){
+            i++;
+        } else if(i == n-1 && quantumTracker == quantum - 1){
             i = 0;
         }
     }
+
+
+    
+
 
     //printing wala pa paused states tho + ala pa test cases
     for(int  i = 0; i < n; i++) {
