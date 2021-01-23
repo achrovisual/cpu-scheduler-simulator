@@ -1,6 +1,7 @@
 #include "fcfs.h"
 #include "nsjf.h"
 #include "psjf.h"
+#include "rr.h"
 #include "file_reading.h"
 #include "core.h"
 #include "cpu_scheduling_core.h"
@@ -25,7 +26,7 @@ int main()
   nsjf(process_values, parameters[1]);
   else if(parameters[0] == 2)
   psjf(process_values, parameters[1]);
-  // else if(parameters[0] == 3)
-  // rr(process_values, parameters[1]);
+  else if(parameters[0] == 3)
+  rr(process_values, parameters[1], parameters[2]);
   return 0;
 }
