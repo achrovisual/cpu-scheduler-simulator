@@ -3,7 +3,7 @@
 #include "core.h"
 #include "cpu_scheduling_core.h"
 
-void rr(int process[][6], int n, int tq) {
+void rr(int process[][6], int n, int time_quantum) {
 
   int paused_states[MAX_VAL][4];
   int iterator = 0;
@@ -42,11 +42,20 @@ void rr(int process[][6], int n, int tq) {
             running_time = process[i][3];
           }
 
-          if(burst_remaining[i] - tq > 0) {
-            burst_remaining[i] -= tq;
-            running_time += tq;
+          if(burst_remaining[i] - time_quantum > 0) {
+            process[i][3] = running_time;
+            burst_remaining[i] -= time_quantum;
+            running_time += time_quantum;
+
+            // store paused states here
+            paused_states[iterator][0] = process[i][0];
+            paused_states[iterator][1] = process[i][3];
+            paused_states[iterator][2] = running_time;
+            iterator++;
           }
           else {
+            process[i][3] = running_time;
+
             running_time += burst_remaining[i];
             burst_remaining[i] = 0;
 
@@ -67,6 +76,12 @@ void rr(int process[][6], int n, int tq) {
     running_time++;
 
   }
+  
+  // for(int i = 0; i < iterator; i++) {
+  //   printf("%d %d %d\n", paused_states[i][0], paused_states[i][1], paused_states[i][2]);
+  // }
+  //
+  // print_result("Round Robin", process, n, total_waiting_time);
 
-  print_result("Round Robin", process, n, total_waiting_time);
+  print_result_with_paused_states("Round Robin", process, paused_states, n, iterator, total_waiting_time);
 }
