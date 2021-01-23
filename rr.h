@@ -4,11 +4,10 @@
 #include "cpu_scheduling_core.h"
 
 void rr(int process[][6], int n, int time_quantum) {
-
-  int paused_states[MAX_VAL][4];
+  int paused_states[999][4];
   int iterator = 0;
 
-  int burst_remaining[MAX_VAL];
+  int burst_remaining[999];
 
   int total_waiting_time = 0, running_time = 0, completed = 0;
   int turn_around_time[n], status[n];
@@ -76,7 +75,7 @@ void rr(int process[][6], int n, int time_quantum) {
     running_time++;
 
   }
-  
+
   // for(int i = 0; i < iterator; i++) {
   //   printf("%d %d %d\n", paused_states[i][0], paused_states[i][1], paused_states[i][2]);
   // }

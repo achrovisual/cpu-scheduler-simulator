@@ -4,6 +4,31 @@
 #ifndef CPU_SCHEDULING_CORE_H
 #define CPU_SCHEDULING_CORE_H
 
+void sjf_find_minimum(int process[][6], int burst_remaining[], int status[], int n, int running_time, int *value, int *minimum) {
+  for(int i = 0; i < n; i++) {
+    if(process[i][1] <= running_time && status[i] == 0) {
+      if(burst_remaining[i] < *minimum) {
+        *minimum = burst_remaining[i];
+        *value = i;
+      }
+      if(burst_remaining[i] == *minimum)
+      if(process[i][1] < process[*value][1]) {
+        *minimum = burst_remaining[i];
+        *value = i;
+      }
+    }
+  }
+}
+
+void sjf_calculate_values(int process[][6], int running_time, int turn_around_time[] , int *total_waiting_time, int status[], int value) {
+  process[value][3] = running_time;
+  process[value][4] = process[value][3] + process[value][2];
+  turn_around_time[value] = process[value][4] - process[value][1];
+  process[value][5] = turn_around_time[value] - process[value][2];
+  *total_waiting_time += process[value][5];
+  status[value] = 1;
+}
+
 void calculate_total_waiting_time(int process[][6], int n, int *total_waiting_time) {
   for(int  i = 0; i < n; i++) {
     *total_waiting_time = *total_waiting_time + process[i][5];
