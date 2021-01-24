@@ -46,17 +46,17 @@ void print_result(char message[], int process[][6], int n, int total_waiting_tim
   printf("\n");
 }
 
-void print_result_with_paused_states(char message[], int process[][6], int paused_states[][4], int n, int iterator, int total_waiting_time) {
+void print_result_with_context(char message[], int process[][6], int context[][4], int n, int iterator, int total_waiting_time) {
   printf("%s\n", message);
   for(int  i = 0; i < n; i++) {
     int is_valid = 1;
 
     for(int j = 0; j < iterator; j++){
-      if(process[i][0] == paused_states[j][0] && process[i][3] != paused_states[j][1]){
+      if(process[i][0] == context[j][0] && process[i][3] != context[j][1]){
         if(is_valid == 1)
-        printf("[%d] Start time: %d End time: %d | ", paused_states[j][0], paused_states[j][1], paused_states[j][2]);
+        printf("[%d] Start time: %d End time: %d | ", context[j][0], context[j][1], context[j][2]);
         else
-        printf("Start time: %d End time: %d | ",  paused_states[j][1], paused_states[j][2]);
+        printf("Start time: %d End time: %d | ",  context[j][1], context[j][2]);
 
         is_valid = 0;
       }

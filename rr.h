@@ -4,7 +4,7 @@
 #include "cpu_scheduling_core.h"
 
 void rr(int process[][6], int n, int time_quantum) {
-  int paused_states[999][4];
+  int context[999][4];
   int iterator = 0;
 
   int burst_remaining[999];
@@ -47,9 +47,9 @@ void rr(int process[][6], int n, int time_quantum) {
             running_time += time_quantum;
 
             // store paused states here
-            paused_states[iterator][0] = process[i][0];
-            paused_states[iterator][1] = process[i][3];
-            paused_states[iterator][2] = running_time;
+            context[iterator][0] = process[i][0];
+            context[iterator][1] = process[i][3];
+            context[iterator][2] = running_time;
             iterator++;
           }
           else {
@@ -77,10 +77,10 @@ void rr(int process[][6], int n, int time_quantum) {
   }
 
   // for(int i = 0; i < iterator; i++) {
-  //   printf("%d %d %d\n", paused_states[i][0], paused_states[i][1], paused_states[i][2]);
+  //   printf("%d %d %d\n", context[i][0], context[i][1], context[i][2]);
   // }
   //
   // print_result("Round Robin", process, n, total_waiting_time);
 
-  print_result_with_paused_states("Round Robin", process, paused_states, n, iterator, total_waiting_time);
+  print_result_with_context("Round Robin", process, context, n, iterator, total_waiting_time);
 }
