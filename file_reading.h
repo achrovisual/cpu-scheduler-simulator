@@ -75,24 +75,24 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
   for(i = 0; i < row_size - 1; i++) {
     for(j = 0; j < 3; j++) {
       if(process_values[i][j] < 0) {
-        error_code = 1;
+        error_code = 2;
       }
     }
   }
-  if(error_code == 1) {
-    printf("A process time's parameter cannot have a negative value.\n");
+  if(error_code == 2) {
+    printf("A process time parameter cannot have a negative value.\n");
   }
 
   //check if process id is unique
   for(i = 0; i < row_size - 1; i++) {
     for(j = i + 1; j < row_size - 1; j++) {
       if(process_values[i][0] == process_values[j][0]) {
-        error_code = 1;
+        error_code = 3;
       }
     }
   }
 
-  if(error_code == 1) {
+  if(error_code == 3) {
     printf("Process IDs cannot have the same value.\n");
   }
 
