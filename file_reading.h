@@ -4,7 +4,7 @@
 
 #define MAX_STRING 900
 
-void read_file(int parameters[], int process_values[][6], char fn[]) {
+int read_file(int parameters[], int process_values[][6], char fn[]) {
   FILE *fp;
   char string[MAX_STRING][MAX_STRING];
   int i = 0, j = 0, n = 0, error_code = 0, process_count = 0;
@@ -53,6 +53,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
       }
       if(error_code == 1) {
         printf("An invalid parameter on the first line has been found.\n");
+        return 1;
       }
 
       //convert the process values to int, store in 2d arr
@@ -78,6 +79,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
       }
       if(error_code == 2) {
         printf("A process time parameter cannot have a negative value.\n");
+        return 1;
       }
 
       //check if process id is unique
@@ -91,14 +93,18 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
 
       if(error_code == 3) {
         printf("Process IDs cannot have the same value.\n");
+        return 1;
       }
+
+      return 0;
 
       // for (int  i = 0; i < 5; i++) {
       //   printf("%d %d %d %d %d %d\n", process_values[i][0], process_values[i][1], process_values[i][2], process_values[i][3], process_values[i][4], process_values[i][5]);
       // }
 
   } else {
-    printf("File cannot be opened: %s.", filename);
+    printf("File cannot be opened: %s.\n", filename);
+    return 1;
   }
   //open file
   

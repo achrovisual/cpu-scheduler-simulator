@@ -26,17 +26,21 @@ int main()
   scanf("%s", filename);
 
   // Get the values required from the indicated text file
-  read_file(parameters, process_values, filename);
+  int check = read_file(parameters, process_values, filename);
+  if(check == 0){
+    if(parameters[0] == 0)
+    fcfs(process_values, parameters[1]);
+    else if(parameters[0] == 1)
+    nsjf(process_values, parameters[1]);
+    else if(parameters[0] == 2)
+    psjf(process_values, parameters[1]);
+    else if(parameters[0] == 3)
+    rr(process_values, parameters[1], parameters[2]);
 
+  } else {
+    return 1;
+  }
   // Run the simulation based on what scheduling algorithm is chosen
-  if(parameters[0] == 0)
-  fcfs(process_values, parameters[1]);
-  else if(parameters[0] == 1)
-  nsjf(process_values, parameters[1]);
-  else if(parameters[0] == 2)
-  psjf(process_values, parameters[1]);
-  else if(parameters[0] == 3)
-  rr(process_values, parameters[1], parameters[2]);
-
+  
   return 0;
 }
