@@ -53,7 +53,7 @@ void rr(int process[][6], int n, int time_quantum) {
       // Go through each process and check if it has arrived.
       for(int i = 0; i < n; i ++) {
         // If the process has arrived and is not yet completed, execute the process.
-        if(status[i] == 0 && running_time >= process[i][1])
+        if(status[i] == 0 && running_time >= process[i][1]) {
           // If the process still hasn't executed, run it and update the values.
           if(burst_remaining[i] == process[i][2]) {
             // Update start time
