@@ -12,8 +12,7 @@ int read_file(int parameters[], int process_values[][6], char fn[]) {
   char filename[MAX_STRING] = "./";
   strcat(filename, fn);
 
-  if(fp = fopen(filename, "r")){
-      
+  if((fp = fopen(filename, "r")) != NULL){
       //read through file
       while(fgets(string[i], MAX_STRING, fp) != NULL) {
         if(strlen(string[i]) - 1 == '\0') {
@@ -107,5 +106,4 @@ int read_file(int parameters[], int process_values[][6], char fn[]) {
     return 1;
   }
   //open file
-  
 }
