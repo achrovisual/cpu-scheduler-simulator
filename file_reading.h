@@ -81,6 +81,7 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
       j++;
     }
 
+<<<<<<< HEAD
     //validate process values
     for(i = 0; i < row_size - 1; i++) {
       for(j = 0; j < 3; j++) {
@@ -99,15 +100,39 @@ void read_file(int parameters[], int process_values[][6], char fn[]) {
         if(process_values[i][0] == process_values[j][0]) {
           error_code = 1;
         }
+=======
+  //validate process values
+  for(i = 0; i < row_size - 1; i++) {
+    for(j = 0; j < 3; j++) {
+      if(process_values[i][j] < 0) {
+        error_code = 2;
+      }
+    }
+  }
+  if(error_code == 2) {
+    printf("A process time parameter cannot have a negative value.\n");
+  }
+
+  //check if process id is unique
+  for(i = 0; i < row_size - 1; i++) {
+    for(j = i + 1; j < row_size - 1; j++) {
+      if(process_values[i][0] == process_values[j][0]) {
+        error_code = 3;
+>>>>>>> c463a03cdb70da0185860107f25a3193b47f20b3
       }
     }
 
+<<<<<<< HEAD
     if(error_code == 1) {
       printf("Process IDs cannot have the same value.\n");
     }
     }
   } else {
     printf("File cannot be opened: %s.", filename);
+=======
+  if(error_code == 3) {
+    printf("Process IDs cannot have the same value.\n");
+>>>>>>> c463a03cdb70da0185860107f25a3193b47f20b3
   }
   
 
