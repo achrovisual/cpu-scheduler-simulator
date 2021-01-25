@@ -1,9 +1,16 @@
+/*
+AUTHOR: Rafael Maderazo
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 #define MAX_STRING 900
 
+/*
+This function reads a txt file and parses the content.
+*/
 int read_file(int parameters[], int process_values[][6], char fn[]) {
   FILE *fp;
   char string[MAX_STRING][MAX_STRING];
