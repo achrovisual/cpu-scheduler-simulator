@@ -16,7 +16,7 @@ This program simulates the following CPU scheduling algorithms:
 * Round Robin
 
 ## Test Cases
-The test cases can be found in the *tests* folder. You can also find the results for these in the results subfolder.
+The test cases can be found in the *tests* folder. You can also find the results for these in the *results* subfolder.
 
 If you would want to use your own test case, follow this format for the file:
 * The first line contains 3 integers separated by space, 𝑋 𝑌 𝑍.
